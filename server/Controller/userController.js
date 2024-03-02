@@ -2,7 +2,6 @@ const userModel = require("../Model/userModel")
 const bcrypt = require("bcrypt")
 const validator = require("validator")
 const jwt = require("jsonwebtoken")
-const { json } = require("express")
 
 const createToken = (_id) => {
     const jwtkey = process.env.SECRET_KEY;
