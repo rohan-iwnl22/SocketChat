@@ -12,9 +12,16 @@ const Register = () => {
     isRegisterLoading,
   } = useContext(AuthContext);
 
+  const handleSubmit = (e) => {
+    e.preventDefault(); // Prevent default form submission
+
+    // Call registerUser function
+    registerUser(e);
+  };
+
   return (
     <>
-      <Form onSubmit={registerUser}>
+      <Form onSubmit={handleSubmit }>
         <Row
           style={{
             height: "100vh",
@@ -64,7 +71,7 @@ const Register = () => {
               </Button>
               {registerError?.error && (
                 <Alert variant="danger">
-                  <p>{error.message}</p>
+                  <p>{registerError?.message}</p>
                 </Alert>
               )}
             </Stack>

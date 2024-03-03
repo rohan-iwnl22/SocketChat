@@ -1,5 +1,6 @@
 import { createContext, useCallback, useEffect, useState } from "react";
-import { baseURL } from "../utils/service";
+import { baseURL, postRequest } from "../utils/service";
+import { json } from "react-router-dom";
 
 export const AuthContext = createContext();
 
@@ -25,22 +26,17 @@ export const AuthContextProvider = ({ children }) => {
 
   const registerUser = useCallback(
     async (e) => {
-      e.preventDefault();
-
       setIsRegisterLoading(true);
       setRegisterError(null);
-
-      const response = await fetch(`${baseURL}/users/register`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(registerInfo),
-      });
+      e.preventDefault();
+      const response = await postRequest(
+        `${baseURL}/users/register`,
+        JSON.stringify(registerInfo)
+      );
 
       setIsRegisterLoading(false);
       if (response.error) {
-        return setRegisterError(response);
+        setRegisterError(response);
       }
 
       localStorage.setItem("User", JSON.stringify(response));
@@ -48,7 +44,6 @@ export const AuthContextProvider = ({ children }) => {
     },
     [registerInfo]
   );
-
   return (
     <AuthContext.Provider
       value={{
