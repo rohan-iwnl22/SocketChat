@@ -1,6 +1,7 @@
 import { createContext, useCallback, useEffect, useState } from "react";
 import { baseURL, postRequest } from "../utils/service";
 import { json } from "react-router-dom";
+import toast from "react-hot-toast";
 
 export const AuthContext = createContext();
 
@@ -24,21 +25,32 @@ export const AuthContextProvider = ({ children }) => {
     setUser(JSON.parse(user));
   }, []);
 
+  const logoutUser = useCallback(() => {
+    localStorage.removeItem("User");
+    setUser(null);
+    toast.success("Log out succesful");
+  });
+
   const registerUser = useCallback(
     async (e) => {
+      e.preventDefault();
+
       setIsRegisterLoading(true);
       setRegisterError(null);
-      e.preventDefault();
+
       const response = await postRequest(
         `${baseURL}/users/register`,
         JSON.stringify(registerInfo)
       );
 
       setIsRegisterLoading(false);
+
       if (response.error) {
-        setRegisterError(response);
+        toast.error(response.message);
+        return setRegisterError(response);
       }
 
+      toast.success("Succesfully resgistered");
       localStorage.setItem("User", JSON.stringify(response));
       setUser(response);
     },
@@ -53,6 +65,7 @@ export const AuthContextProvider = ({ children }) => {
         registerError,
         registerUser,
         isRegisterLoading,
+        logoutUser,
       }}
     >
       {children}

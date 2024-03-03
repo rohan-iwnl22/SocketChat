@@ -1,27 +1,14 @@
 import React, { useContext } from "react";
 import { Alert, Button, Form, Row, Col, Stack } from "react-bootstrap";
 import { AuthContext } from "../context/AuthContext";
-import { postRequest } from "../utils/service";
 
 const Register = () => {
-  const {
-    registerInfo,
-    updateRegisterInfo,
-    registerUser,
-    registerError,
-    isRegisterLoading,
-  } = useContext(AuthContext);
-
-  const handleSubmit = (e) => {
-    e.preventDefault(); // Prevent default form submission
-
-    // Call registerUser function
-    registerUser(e);
-  };
+  const { registerInfo, updateRegisterInfo, registerUser, isRegisterLoading } =
+    useContext(AuthContext);
 
   return (
     <>
-      <Form onSubmit={handleSubmit }>
+      <Form onSubmit={registerUser}>
         <Row
           style={{
             height: "100vh",
@@ -69,11 +56,11 @@ const Register = () => {
               <Button variant="primary" type="submit">
                 {isRegisterLoading ? "Creating your account " : "Register"}
               </Button>
-              {registerError?.error && (
+              {/* {registerError?.error && (
                 <Alert variant="danger">
                   <p>{registerError?.message}</p>
                 </Alert>
-              )}
+              )} */}
             </Stack>
           </Col>
         </Row>

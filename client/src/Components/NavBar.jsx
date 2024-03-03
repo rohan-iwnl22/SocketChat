@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 
 const NavBar = () => {
-  const { user } = useContext(AuthContext);
+  const { user, logoutUser } = useContext(AuthContext);
   return (
     <Navbar bg="dark" className="mb-4" style={{ height: "3.75rem" }}>
       <Container>
@@ -13,15 +13,35 @@ const NavBar = () => {
             ChatApp
           </Link>
         </h2>
-        {user && <span className="text-warning">Logged in as {user?.name}</span>}
+        {user && (
+          <span className="text-warning">Logged in as {user?.name}</span>
+        )}
         <Nav>
           <Stack direction="horizontal" gap={4}>
-            <Link className="link-light text-decoration-none" to="/login">
-              Login
-            </Link>
-            <Link className="link-light text-decoration-none" to="/register">
-              Register
-            </Link>
+            {user && (
+              <>
+                <Link
+                  onClick={() => logoutUser()}
+                  className="link-light text-decoration-none"
+                  to="/login"
+                >
+                  Logout
+                </Link>
+              </>
+            )}
+            {!user && (
+              <>
+                <Link className="link-light text-decoration-none" to="/login">
+                  Login
+                </Link>
+                <Link
+                  className="link-light text-decoration-none"
+                  to="/register"
+                >
+                  Register
+                </Link>
+              </>
+            )}
           </Stack>
         </Nav>
       </Container>

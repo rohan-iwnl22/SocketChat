@@ -9,6 +9,8 @@ export const postRequest = async (url, body) => {
     body,
   });
   const data = await response.json();
+
+//   error handling
   if (!response.ok) {
     let message;
     if (data?.message) {
@@ -20,5 +22,6 @@ export const postRequest = async (url, body) => {
     return { error: true, message };
   }
 
+// returning the data  
   return data;
 };
