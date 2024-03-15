@@ -16,6 +16,14 @@ export const AuthContextProvider = ({ children }) => {
   const [registerError, setRegisterError] = useState(null);
   const [isRegisterLoading, setIsRegisterLoading] = useState(false);
 
+  const [loginInfo, setLoginInfo] = useState({
+    email: "",
+    password: "",
+  });
+
+  const [loginError, setLoginError] = useState(null);
+  const [isloginLoading, setIsLoginLoading] = useState(false);
+
   const updateRegisterInfo = useCallback((info) => {
     setRegisterInfo(info);
   }, []);
@@ -30,6 +38,36 @@ export const AuthContextProvider = ({ children }) => {
     setUser(null);
     toast.success("Log out succesful");
   });
+
+  const updateLoginInfo = useCallback((info) => {
+    setLoginInfo(info);
+  }, []);
+
+  const loginUser = useCallback(
+    async (e) => {
+      e.preventDefault();
+
+      setIsLoginLoading(true);
+      setLoginError(null);
+
+      const response = await postRequest(
+        `${baseURL}/users/login`,
+        JSON.stringify(loginInfo)
+      );
+
+      setIsLoginLoading(false);
+
+      if (response.error) {
+        toast.error(response.message);
+        return setLoginError(response);
+      }
+
+      toast.success("Successfully Logged In");
+      localStorage.setItem("User", JSON.stringify(response));
+      setUser(response);
+    },
+    [loginInfo]
+  );
 
   const registerUser = useCallback(
     async (e) => {
@@ -66,6 +104,11 @@ export const AuthContextProvider = ({ children }) => {
         registerUser,
         isRegisterLoading,
         logoutUser,
+        loginError,
+        loginUser,
+        loginInfo,
+        isloginLoading,
+        updateLoginInfo,
       }}
     >
       {children}
